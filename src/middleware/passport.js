@@ -4,6 +4,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const { usuarios } = require("../daos/UsuariosDAO");
 let { app } = require("../global");
 
+const USUARIO_NO_VALIDO = "Usuario o contraseña no validos.";
+
 function passportConfig() {
   app.use(passport.initialize());
   app.use(passport.session());
@@ -18,11 +20,11 @@ function passportConfig() {
 
         if (!usuario) {
           console.log("Usuario no encontrado: ", username);
-          return done(null, false, { message: "Usuario inexistente." });
+          return done(null, false, { message: USUARIO_NO_VALIDO });
         } else {
           if (!isValidPassword(usuario, password)) {
             console.log(username, "contraseña invalida");
-            return done(null, false, { message: "Contraseña invalida." });
+            return done(null, false, { message: USUARIO_NO_VALIDO });
           } else {
             return done(null, usuario);
           }
